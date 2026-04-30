@@ -304,7 +304,7 @@
   <div class="panel active" id="panel0">
     <div class="panel-header">
       <span class="panel-title">📦 출산 전</span>
-      <span class="progress-text" id="prog0">0 / 5</span>
+      <span class="progress-text" id="prog0">0 / 6</span>
     </div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="bar0" style="width:0%"></div></div>
     <div class="check-sub" style="color:#aaa;font-size:12px;padding:0 4px 10px;">출산일 기준 약 2주 전까지 완료하세요</div>
@@ -361,6 +361,17 @@
           <div class="tag-row">
             <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'dpre_4','mom')">엄마</button>
             <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'dpre_4','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggle(this)" data-id="dpre_5">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">산후조리비 지원금 신청
+          <div class="check-sub">국민건강보험 또는 지자체 산후조리비 바우처/현금 지원 확인 및 신청</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'dpre_5','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'dpre_5','dad')">아빠</button>
           </div>
         </div>
       </div>
@@ -480,7 +491,7 @@
   <div class="panel" id="panel2">
     <div class="panel-header">
       <span class="panel-title">📝 조리원 생활중</span>
-      <span class="progress-text" id="prog2">0 / 16</span>
+      <span class="progress-text" id="prog2">0 / 15</span>
     </div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="bar2" style="width:0%"></div></div>
     <div class="check-sub" style="color:#aaa;font-size:12px;padding:0 4px 10px;">출생신고 완료 후 진행하세요</div>
@@ -575,7 +586,7 @@
       <div class="check-item" onclick="toggle(this)" data-id="d1_9">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="check-text">산후도우미 연락하기
-          <div class="check-sub">코코맘 010-2730-2535</div>
+          <div class="check-sub">코코맘 010-2730-2535 / 모유 수유 서포트 가능하신 분으로</div>
           <div class="tag-row">
             <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_9','mom')">엄마</button>
             <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_9','dad')">아빠</button>
@@ -627,18 +638,7 @@
         </div>
       </div>
 
-      <div class="check-item" onclick="toggle(this)" data-id="d1_15">
-        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">산후조리비 지원금 신청
-          <div class="check-sub">국민건강보험 또는 지자체 산후조리비 바우처/현금 지원 확인 및 신청</div>
-          <div class="tag-row">
-            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_15','mom')">엄마</button>
-            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_15','dad')">아빠</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="check-item" onclick="toggle(this)" data-id="d1_16">
+<div class="check-item" onclick="toggle(this)" data-id="d1_16">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="check-text">각자 회사 출산 지원금 신청
           <div class="check-sub">출산 축하비 · 경조금 등 / 회사 복지몰 또는 HR 문의</div>
@@ -954,7 +954,7 @@
   const db = getDatabase(app);
   const checklistRef = ref(db, 'checklist');
 
-  const TOTAL = [5, 9, 16, 5, 5];
+  const TOTAL = [6, 9, 15, 5, 5];
   let remoteUpdating = false;
 
   function setSyncStatus(status) {
