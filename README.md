@@ -1,1 +1,1 @@
-# claude-code
+# salt-checklist
