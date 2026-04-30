@@ -23,7 +23,6 @@
     .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
     .header p { font-size: 13px; opacity: 0.9; }
 
-    /* 싱크 상태 표시 */
     .sync-bar {
       background: white;
       padding: 8px 20px;
@@ -35,22 +34,15 @@
       border-bottom: 1px solid #f0f0f0;
     }
     .sync-dot {
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       background: #ccc;
       flex-shrink: 0;
       transition: background 0.3s;
     }
     .sync-dot.connected { background: #4caf50; }
-    .sync-dot.syncing {
-      background: #ff9800;
-      animation: pulse 1s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
+    .sync-dot.syncing { background: #ff9800; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
     .date-section {
       background: white;
@@ -60,8 +52,9 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     .date-section h2 { font-size: 15px; color: #555; margin-bottom: 14px; font-weight: 600; }
-
     .date-row { display: flex; flex-direction: column; gap: 12px; }
+    .date-divider { border: none; border-top: 1px solid #f0f0f0; margin: 2px 0; }
+
     .date-item {
       display: flex;
       align-items: center;
@@ -69,58 +62,37 @@
       gap: 10px;
     }
     .date-item label {
-      font-size: 14px;
-      font-weight: 600;
-      color: #333;
-      white-space: nowrap;
-      min-width: 110px;
+      font-size: 14px; font-weight: 600; color: #333;
+      white-space: nowrap; min-width: 110px;
     }
     .date-item input[type="date"] {
       flex: 1;
       padding: 10px 12px;
       border: 1.5px solid #e0e0e0;
       border-radius: 10px;
-      font-size: 14px;
-      color: #222;
+      font-size: 14px; color: #222;
       background: #fafafa;
-      -webkit-appearance: none;
-      outline: none;
+      -webkit-appearance: none; outline: none;
       max-width: 180px;
     }
     .date-item input[type="date"]:focus { border-color: #ff8fab; background: white; }
-    .date-item.auto-date {
-      background: #fff5f7;
-      border-radius: 10px;
-      padding: 10px 12px;
-    }
+    .date-item.auto-date { background: #fff5f7; border-radius: 10px; padding: 10px 12px; }
     .date-item.auto-date label { color: #888; font-weight: 500; }
-    .auto-value {
-      font-size: 14px;
-      font-weight: 700;
-      color: #ff8fab;
-      min-width: 110px;
-      text-align: right;
-    }
+    .auto-value { font-size: 14px; font-weight: 700; color: #ff8fab; min-width: 110px; text-align: right; }
 
-    .tabs-wrapper {
-      padding: 16px 16px 0;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
+    .tabs-wrapper { padding: 16px 16px 0; overflow-x: auto; scrollbar-width: none; }
     .tabs-wrapper::-webkit-scrollbar { display: none; }
     .tabs { display: flex; gap: 8px; min-width: max-content; }
     .tab-btn {
       padding: 9px 14px;
-      border-radius: 20px;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
+      border-radius: 20px; border: none;
+      font-size: 13px; font-weight: 600;
       cursor: pointer;
-      background: white;
-      color: #888;
+      background: white; color: #888;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
       white-space: nowrap;
       transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
     }
     .tab-btn.active { background: #ff8fab; color: white; box-shadow: 0 2px 8px rgba(255,143,171,0.4); }
     .tab-btn .tab-date { font-size: 11px; font-weight: 400; display: block; margin-top: 2px; opacity: 0.8; }
@@ -130,41 +102,29 @@
     .panel.active { display: block; }
 
     .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-      padding: 0 4px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px; padding: 0 4px;
     }
     .panel-title { font-size: 16px; font-weight: 700; color: #333; }
     .progress-text { font-size: 13px; color: #ff8fab; font-weight: 600; }
 
     .progress-bar-wrap {
-      background: #f0f0f0;
-      border-radius: 6px;
-      height: 6px;
-      margin-bottom: 14px;
-      overflow: hidden;
+      background: #f0f0f0; border-radius: 6px; height: 6px;
+      margin-bottom: 14px; overflow: hidden;
     }
     .progress-bar {
-      height: 100%;
-      border-radius: 6px;
+      height: 100%; border-radius: 6px;
       background: linear-gradient(90deg, #ff8fab, #ffb3c6);
       transition: width 0.3s ease;
     }
 
     .check-card {
-      background: white;
-      border-radius: 12px;
-      margin-bottom: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-      overflow: hidden;
+      background: white; border-radius: 12px; margin-bottom: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07); overflow: hidden;
     }
     .check-item {
-      display: flex;
-      align-items: flex-start;
-      padding: 14px 16px;
-      gap: 12px;
+      display: flex; align-items: flex-start;
+      padding: 14px 16px; gap: 12px;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       transition: background 0.15s;
@@ -173,14 +133,11 @@
     .check-item + .check-item { border-top: 1px solid #f5f5f5; }
 
     .check-box {
-      width: 22px;
-      height: 22px;
+      width: 22px; height: 22px;
       border-radius: 50%;
       border: 2px solid #ddd;
       flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       margin-top: 1px;
       transition: all 0.2s;
     }
@@ -189,10 +146,7 @@
     .check-item.done .check-box svg { display: block; }
 
     .check-text {
-      flex: 1;
-      font-size: 14px;
-      line-height: 1.5;
-      color: #333;
+      flex: 1; font-size: 14px; line-height: 1.5; color: #333;
       transition: color 0.2s;
     }
     .check-item.done .check-text { color: #bbb; text-decoration: line-through; }
@@ -200,28 +154,33 @@
     .check-sub { font-size: 12px; color: #aaa; margin-top: 3px; line-height: 1.4; }
     .check-item.done .check-sub { color: #ccc; }
 
-    .tag-optional {
-      display: inline-block;
-      font-size: 11px;
-      background: #f0f0f0;
-      color: #aaa;
-      border-radius: 4px;
-      padding: 1px 6px;
-      margin-left: 4px;
-      font-weight: 500;
-      vertical-align: middle;
-    }
+    /* 태그 공통 */
     .tag-important {
-      display: inline-block;
-      font-size: 11px;
-      background: #fff0f3;
-      color: #ff8fab;
-      border-radius: 4px;
-      padding: 1px 6px;
-      margin-left: 4px;
-      font-weight: 600;
-      vertical-align: middle;
+      display: inline-block; font-size: 11px;
+      background: #fff0f3; color: #ff8fab;
+      border-radius: 4px; padding: 1px 6px;
+      margin-left: 4px; font-weight: 600; vertical-align: middle;
     }
+
+    /* 역할 태그 행 */
+    .tag-row {
+      display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap;
+    }
+    .tag-role {
+      display: inline-flex; align-items: center;
+      font-size: 11px; font-weight: 600;
+      border-radius: 4px; padding: 2px 9px;
+      border: 1.5px solid #e8e8e8;
+      background: white; color: #ccc;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: all 0.15s;
+      line-height: 1.4;
+    }
+    .tag-role:active { transform: scale(0.96); }
+    .tag-role.on-mom { background: #fff0f3; color: #ff8fab; border-color: #ff8fab; }
+    .tag-role.on-dad { background: #edf4ff; color: #4a8fd4; border-color: #4a8fd4; }
+    .check-item.done .tag-role { opacity: 0.45; }
 
     .all-done { text-align: center; padding: 24px; display: none; }
     .all-done.show { display: block; }
@@ -229,16 +188,41 @@
     .all-done p { font-size: 14px; color: #888; margin-top: 8px; }
 
     .reset-btn {
-      display: block;
-      margin: 0 auto;
+      display: block; margin: 0 auto;
       padding: 8px 20px;
-      border: 1.5px solid #ddd;
-      border-radius: 20px;
-      background: white;
-      color: #aaa;
-      font-size: 13px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
+      border: 1.5px solid #ddd; border-radius: 20px;
+      background: white; color: #aaa; font-size: 13px;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 메모 탭 */
+    .memo-panel-title { font-size: 16px; font-weight: 700; color: #333; padding: 0 4px 12px; }
+    details.memo-section {
+      background: white; border-radius: 12px; margin-bottom: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07); overflow: hidden;
+    }
+    details.memo-section summary {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px; font-size: 15px; font-weight: 700; color: #333;
+      cursor: pointer; list-style: none;
+      -webkit-tap-highlight-color: transparent; user-select: none;
+    }
+    details.memo-section summary::-webkit-details-marker { display: none; }
+    details.memo-section summary::after { content: '▸'; font-size: 13px; color: #ccc; transition: transform 0.2s; flex-shrink: 0; }
+    details.memo-section[open] summary::after { transform: rotate(90deg); }
+    .memo-body { padding: 0 16px 16px; border-top: 1px solid #f5f5f5; }
+    .memo-item { padding: 10px 0; border-bottom: 1px solid #f9f9f9; }
+    .memo-item:last-child { border-bottom: none; }
+    .memo-item-title { font-size: 13px; font-weight: 700; color: #444; margin-bottom: 4px; }
+    .memo-item-desc { font-size: 12px; color: #777; line-height: 1.6; }
+    .memo-badge {
+      display: inline-block; font-size: 10px;
+      background: #fff0f3; color: #ff8fab;
+      border-radius: 4px; padding: 1px 6px; margin-left: 6px; font-weight: 600; vertical-align: middle;
+    }
+    .memo-note {
+      font-size: 11px; color: #bbb; margin-top: 12px; line-height: 1.5;
+      padding: 10px; background: #fafafa; border-radius: 8px;
     }
   </style>
 </head>
@@ -265,9 +249,14 @@
       <label>🏥 조리원 입소일</label>
       <input type="date" id="careDate" onchange="saveDates()">
     </div>
+    <hr class="date-divider">
+    <div class="date-item auto-date">
+      <label>📦 출산 전 준비</label>
+      <span class="auto-value" id="datePre">출산일 -14일</span>
+    </div>
     <div class="date-item auto-date">
       <label>📝 조리원 생활중</label>
-      <span class="auto-value" id="care3">입소일 +3일</span>
+      <span class="auto-value" id="care1">입소 다음날</span>
     </div>
     <div class="date-item auto-date">
       <label>🤱 아기 오기 전</label>
@@ -283,202 +272,662 @@
 <div class="tabs-wrapper">
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab(0)">
-      🚨 출산 당일
-      <span class="tab-date" id="tab0date">날짜 미입력</span>
+      📦 출산 전
+      <span class="tab-date" id="tab0date">출산일 -14일</span>
     </button>
     <button class="tab-btn" onclick="switchTab(1)">
-      📝 조리원 생활중
-      <span class="tab-date" id="tab1date">입소일 +3일</span>
+      🚨 출산 당일
+      <span class="tab-date" id="tab1date">날짜 미입력</span>
     </button>
     <button class="tab-btn" onclick="switchTab(2)">
-      🤱 아기 오기 전
-      <span class="tab-date" id="tab2date">입소일 +7일</span>
+      📝 조리원 생활중
+      <span class="tab-date" id="tab2date">입소 다음날</span>
     </button>
     <button class="tab-btn" onclick="switchTab(3)">
+      🤱 아기 오기 전
+      <span class="tab-date" id="tab3date">입소일 +7일</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab(4)">
       👶 아기 오는 날
-      <span class="tab-date" id="tab3date">입소일 +14일</span>
+      <span class="tab-date" id="tab4date">입소일 +14일</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab(5)">
+      📋 메모
+      <span class="tab-date">정보 모음</span>
     </button>
   </div>
 </div>
 
 <div class="panels">
 
-  <!-- 출산 당일 -->
+  <!-- ========== 출산 전 ========== -->
   <div class="panel active" id="panel0">
     <div class="panel-header">
-      <span class="panel-title">🚨 출산 당일</span>
-      <span class="progress-text" id="prog0">0 / 8</span>
+      <span class="panel-title">📦 출산 전</span>
+      <span class="progress-text" id="prog0">0 / 5</span>
     </div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="bar0" style="width:0%"></div></div>
+    <div class="check-sub" style="color:#aaa;font-size:12px;padding:0 4px 10px;">출산일 기준 약 2주 전까지 완료하세요</div>
     <div class="check-card">
-      <div class="check-item" onclick="toggle(this)" data-id="d0_0">
+
+      <div class="check-item" onclick="toggle(this)" data-id="dpre_0">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">병원에 1인 입원실 사용알리기</div>
+        <div class="check-text">출산가방 싸기
+          <div class="check-sub">산모 세면도구·속옷·편한 옷 / 아기 배냇저고리·기저귀·손싸개 등</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'dpre_0','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'dpre_0','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d0_1">
+
+      <div class="check-item" onclick="toggle(this)" data-id="dpre_1">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">제대혈 보관 여부 상의한 결과 알리기</div>
+        <div class="check-text">아기 옷 및 손수건 등 빨래 · 건조
+          <div class="check-sub">아기 전용 세제로 세탁, 건조까지 완료</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'dpre_1','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'dpre_1','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d0_2">
+
+      <div class="check-item" onclick="toggle(this)" data-id="dpre_2">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">아기 동영상 촬영 <span class="tag-important">중요</span><div class="check-sub">최대한 길게, 많이, 선명하게 촬영</div></div>
+        <div class="check-text">무배당 우체국 대한민국 엄마 보험 가입
+          <div class="check-sub">무료 / 22주 이전 가입 필요 / 우체국 방문 또는 앱</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'dpre_2','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'dpre_2','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d0_3">
+
+      <div class="check-item" onclick="toggle(this)" data-id="dpre_3">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">무통주사 · 페인버스터 확인</div>
+        <div class="check-text">맘마존 설치
+          <div class="check-sub">분유 제조기 · 분유포트 · 젖병 위치 셋업 및 기계 소독</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'dpre_3','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'dpre_3','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d0_4">
+
+      <div class="check-item" onclick="toggle(this)" data-id="dpre_4">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">출생증명서 받기 (출산병원)</div>
+        <div class="check-text">홈캠 설치 <span class="tag-important">중요</span>
+          <div class="check-sub">헤이홈 등 / 아기 자는 곳 위주로 각도 세팅</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'dpre_4','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'dpre_4','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d0_5">
-        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">산후조리원에 연락하기</div>
-      </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d0_6">
-        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">산후도우미 연락하기</div>
-      </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d0_7">
-        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">출생신고<div class="check-sub">온라인(처리 오래 걸림) · 관할 주민센터(빠름)</div></div>
-      </div>
+
     </div>
-    <div class="all-done" id="done0"><span>🎉</span><p>출산 당일 항목을 모두 완료했어요!</p></div>
+    <div class="all-done" id="done0"><span>🎉</span><p>출산 전 항목을 모두 완료했어요!</p></div>
   </div>
 
-  <!-- 조리원 생활중 -->
+  <!-- ========== 출산 당일 ========== -->
   <div class="panel" id="panel1">
     <div class="panel-header">
-      <span class="panel-title">📝 조리원 생활중</span>
-      <span class="progress-text" id="prog1">0 / 8</span>
+      <span class="panel-title">🚨 출산 당일</span>
+      <span class="progress-text" id="prog1">0 / 9</span>
     </div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="bar1" style="width:0%"></div></div>
-    <div class="check-sub" style="color:#aaa;font-size:12px;padding:0 4px 10px;">출생신고 완료 후 진행하세요</div>
     <div class="check-card">
-      <div class="check-item" onclick="toggle(this)" data-id="d1_0">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d0_0">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">아기 통장 만들기<div class="check-sub">필요 서류: 아기 도장 · 가족관계증명서 · 부모 신분증</div></div>
+        <div class="check-text">병원에 1인 입원실 사용 알리기
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d0_0','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d0_0','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d1_1">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d0_1">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">아동수당 · 첫만남이용권 · 부모급여 신청<div class="check-sub">복지로/정부24 또는 주민센터 방문<br>아동수당 · 부모급여는 아기 통장으로 신청</div></div>
+        <div class="check-text">제대혈 보관 여부 상의한 결과 알리기
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d0_1','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d0_1','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d1_2">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d0_2">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">1차 영유아검진 예약</div>
+        <div class="check-text">아기 동영상 촬영 <span class="tag-important">중요</span>
+          <div class="check-sub">최대한 길게, 많이, 선명하게 촬영</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d0_2','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d0_2','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d1_3">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d0_3">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">BCG 예방접종 예약<div class="check-sub">피내용 · 경피용 상의하여 결정</div></div>
+        <div class="check-text">무통주사 · 페인버스터 확인
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d0_3','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d0_3','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d1_4">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d0_4">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">건강보험공단에 아기 피보험자 등록 여부 확인</div>
+        <div class="check-text">출생증명서 받기 (출산병원)
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d0_4','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d0_4','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d1_5">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d0_5">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">한전 연락해서 전기세 감면 신청</div>
+        <div class="check-text">산후조리원에 연락하기
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d0_5','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d0_5','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d1_6">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d0_6">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">아기 보험사 연락해서 자녀 등록</div>
+        <div class="check-text">출생신고
+          <div class="check-sub">온라인(처리 오래 걸림) · 관할 주민센터(빠름)</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d0_6','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d0_6','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d1_7">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d0_7">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">자동차보험 자녀특약 신청</div>
+        <div class="check-text">퇴원 서류 요청
+          <div class="check-sub">아기 진단서 · 의무기록 사본 · 신생아 검사 결과지</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d0_7','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d0_7','dad')">아빠</button>
+          </div>
+        </div>
       </div>
+
+      <div class="check-item" onclick="toggle(this)" data-id="d0_8">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">태아보험 → 영유아보험 전환 연락 <span class="tag-important">중요</span>
+          <div class="check-sub">출생 후 보험사에 연락하여 전환 처리 (기간 내 전환 필수)</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d0_8','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d0_8','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="all-done" id="done1"><span>🎉</span><p>조리원 생활중 항목을 모두 완료했어요!</p></div>
+    <div class="all-done" id="done1"><span>🎉</span><p>출산 당일 항목을 모두 완료했어요!</p></div>
   </div>
 
-  <!-- 아기 오기 전 -->
+  <!-- ========== 조리원 생활중 ========== -->
   <div class="panel" id="panel2">
     <div class="panel-header">
-      <span class="panel-title">🤱 아기 오기 전</span>
-      <span class="progress-text" id="prog2">0 / 10</span>
+      <span class="panel-title">📝 조리원 생활중</span>
+      <span class="progress-text" id="prog2">0 / 16</span>
     </div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="bar2" style="width:0%"></div></div>
-    <div class="check-sub" style="color:#aaa;font-size:12px;padding:0 4px 10px;">아기 오기 이틀 전까지 완료 (세제 냄새 빼야 함)</div>
+    <div class="check-sub" style="color:#aaa;font-size:12px;padding:0 4px 10px;">출생신고 완료 후 진행하세요</div>
     <div class="check-card">
-      <div class="check-item" onclick="toggle(this)" data-id="d2_0">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_0">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">화장실 청소 😉<div class="check-sub">누워서 잘 수 있을 정도로 / 세제 냄새 빠지도록 이틀 전까지</div></div>
+        <div class="check-text">아기 통장 만들기
+          <div class="check-sub">필요 서류: 아기 도장 · 가족관계증명서 · 부모 신분증</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_0','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_0','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d2_1">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_1">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">집 청소<div class="check-sub">청소기 구석구석 + 스팀 구석구석</div></div>
+        <div class="check-text">아동수당 · 첫만남이용권 · 부모급여 신청
+          <div class="check-sub">복지로/정부24 또는 주민센터 방문<br>아동수당 · 부모급여는 아기 통장으로 신청</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_1','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_1','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d2_2">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_2">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">일회용 먼지포로 구석구석 먼지 없애기<div class="check-sub">티비서랍 맨 왼쪽에 있음</div></div>
+        <div class="check-text">1차 영유아검진 예약 <span class="tag-important">중요</span>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_2','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_2','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d2_3">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_3">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">창문 로봇청소기 돌리기 <span class="tag-optional">선택</span></div>
+        <div class="check-text">BCG 예방접종 예약 <span class="tag-important">중요</span>
+          <div class="check-sub">피내용(병원) · 경피용(도장형) 미리 상의하여 결정 / 생후 4주 이내 접종 권장</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_3','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_3','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d2_4">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_4">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">자동차 내외부 세차</div>
+        <div class="check-text">건강보험공단에 아기 피보험자 등록 여부 확인 <span class="tag-important">중요</span>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_4','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_4','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d2_5">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_5">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">유팡 세척</div>
+        <div class="check-text">한전 연락해서 전기세 감면 신청
+          <div class="check-sub">출생일로부터 3년간 월 16,000원 한도 감면</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_5','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_5','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d2_6">
+
+<div class="check-item" onclick="toggle(this)" data-id="d1_7">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">젖병 세척 후 건조대에서 완전히 건조<div class="check-sub">물기 완전히 제거 후 유팡 돌려야 함 (물기 x)</div></div>
+        <div class="check-text">자동차보험 자녀 특약 신청
+          <div class="check-sub">신생아 자녀 등록 시 보험료 할인 혜택 확인</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_7','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_7','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d2_7">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_8">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">유팡 완료 후 물기 확인<div class="check-sub">물기 있으면 → 건조대에서 건조<br>물기 없으면 → 젖병 보관함에 보관</div></div>
+        <div class="check-text">회사 포탈에 자녀 등록
+          <div class="check-sub">육아휴직 지원 · 보험 지원 등 혜택 신청 목적</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_8','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_8','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d2_8">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_9">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">릴리브 분유포트 세척</div>
+        <div class="check-text">산후도우미 연락하기
+          <div class="check-sub">코코맘 010-2730-2535</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_9','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_9','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d2_9">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_10">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">철제 부속품 연마제 제거 및 세척</div>
+        <div class="check-text">신생아 실비보험 가입 <span class="tag-important">중요</span>
+          <div class="check-sub">네이버 실비보험 등 / 출생 후 30일 이내 가입 가능 (무심사 기간)</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_10','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_10','dad')">아빠</button>
+          </div>
+        </div>
       </div>
+
+<div class="check-item" onclick="toggle(this)" data-id="d1_12">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">젖병 소독기 점검 및 사전 소독
+          <div class="check-sub">스팀 소독기 작동 확인, 젖병·젖꼭지 세트 소독</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_12','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_12','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_13">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">아기 용품 소독 및 빨래 추가 점검
+          <div class="check-sub">속싸개·배냇저고리·손발싸개 추가 세탁, 장난감 소독</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_13','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_13','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_14">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">100일 촬영 스튜디오 예약
+          <div class="check-sub">인기 스튜디오는 수개월 전 마감 / 조리원 생활 중 예약 필수</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_14','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_14','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_15">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">산후조리비 지원금 신청
+          <div class="check-sub">국민건강보험 또는 지자체 산후조리비 바우처/현금 지원 확인 및 신청</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_15','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_15','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_16">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">각자 회사 출산 지원금 신청
+          <div class="check-sub">출산 축하비 · 경조금 등 / 회사 복지몰 또는 HR 문의</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_16','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_16','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggle(this)" data-id="d1_17">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">임신 · 출산 축하금 신청 (지자체)
+          <div class="check-sub">거주 지자체별 상이 / 주민센터 방문 또는 복지로 온라인 신청</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d1_17','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d1_17','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="all-done" id="done2"><span>🎉</span><p>아기 오기 전 항목을 모두 완료했어요!</p></div>
+    <div class="all-done" id="done2"><span>🎉</span><p>조리원 생활중 항목을 모두 완료했어요!</p></div>
   </div>
 
-  <!-- 아기 오는 당일 -->
+  <!-- ========== 아기 오기 전 ========== -->
   <div class="panel" id="panel3">
     <div class="panel-header">
-      <span class="panel-title">👶 아기 오는 날</span>
-      <span class="progress-text" id="prog3">0 / 6</span>
+      <span class="panel-title">🤱 아기 오기 전</span>
+      <span class="progress-text" id="prog3">0 / 5</span>
     </div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="bar3" style="width:0%"></div></div>
+    <div class="check-sub" style="color:#aaa;font-size:12px;padding:0 4px 10px;">아기 오기 이틀 전까지 완료 (세제 냄새 빼야 함)</div>
     <div class="check-card">
+
+      <div class="check-item" onclick="toggle(this)" data-id="d2_0">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">화장실 청소 😉
+          <div class="check-sub">누워서 잘 수 있을 정도로 / 세제 냄새 빠지도록 이틀 전까지</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d2_0','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d2_0','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggle(this)" data-id="d2_1">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">집 청소
+          <div class="check-sub">청소기 구석구석 + 스팀 구석구석</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d2_1','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d2_1','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggle(this)" data-id="d2_2">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">일회용 먼지포로 구석구석 먼지 없애기
+          <div class="check-sub">티비서랍 맨 왼쪽에 있음</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d2_2','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d2_2','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggle(this)" data-id="d2_3">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">자동차 내외부 세차
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d2_3','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d2_3','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggle(this)" data-id="d2_4">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">보르르 분유포트 세척
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d2_4','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d2_4','dad')">아빠</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="all-done" id="done3"><span>🎉</span><p>아기 오기 전 항목을 모두 완료했어요!</p></div>
+  </div>
+
+  <!-- ========== 아기 오는 날 ========== -->
+  <div class="panel" id="panel4">
+    <div class="panel-header">
+      <span class="panel-title">👶 아기 오는 날</span>
+      <span class="progress-text" id="prog4">0 / 5</span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="bar4" style="width:0%"></div></div>
+    <div class="check-card">
+
       <div class="check-item" onclick="toggle(this)" data-id="d3_0">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">분유포트 물 넣고 온도 세팅<div class="check-sub">45° 설정</div></div>
+        <div class="check-text">분유포트 물 넣고 온도 세팅
+          <div class="check-sub">45° 설정</div>
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d3_0','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d3_0','dad')">아빠</button>
+          </div>
+        </div>
       </div>
+
       <div class="check-item" onclick="toggle(this)" data-id="d3_1">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">아기 물건 비닐 걷어놓기</div>
+        <div class="check-text">아기 물건 비닐 걷어놓기
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d3_1','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d3_1','dad')">아빠</button>
+          </div>
+        </div>
       </div>
+
       <div class="check-item" onclick="toggle(this)" data-id="d3_2">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">차에 "신생아 타고 있어요" 붙이기</div>
+        <div class="check-text">차에 "신생아 타고 있어요" 붙이기
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d3_2','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d3_2','dad')">아빠</button>
+          </div>
+        </div>
       </div>
+
       <div class="check-item" onclick="toggle(this)" data-id="d3_3">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">카시트 점검</div>
+        <div class="check-text">카시트 점검
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d3_3','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d3_3','dad')">아빠</button>
+          </div>
+        </div>
       </div>
+
       <div class="check-item" onclick="toggle(this)" data-id="d3_4">
         <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">공기청정기 미리 틀어놓기</div>
+        <div class="check-text">공기청정기 미리 틀어놓기
+          <div class="tag-row">
+            <button class="tag-role" data-role="mom" onclick="toggleTag(event,this,'d3_4','mom')">엄마</button>
+            <button class="tag-role" data-role="dad" onclick="toggleTag(event,this,'d3_4','dad')">아빠</button>
+          </div>
+        </div>
       </div>
-      <div class="check-item" onclick="toggle(this)" data-id="d3_5">
-        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="check-text">집 나올 때 로봇청소기 돌리고 나오기</div>
-      </div>
+
     </div>
-    <div class="all-done" id="done3"><span>🎉</span><p>아기 오는 날 항목을 모두 완료했어요!</p></div>
+    <div class="all-done" id="done4"><span>🎉</span><p>아기 오는 날 항목을 모두 완료했어요!</p></div>
+  </div>
+
+  <!-- ========== 메모 ========== -->
+  <div class="panel" id="panel5">
+    <div class="memo-panel-title">📋 정보 메모</div>
+
+    <details class="memo-section" open>
+      <summary>💰 출산 후 급여 및 수당</summary>
+      <div class="memo-body">
+        <div class="memo-item">
+          <div class="memo-item-title">부모급여 <span class="memo-badge">매달 지급</span></div>
+          <div class="memo-item-desc">0세 (0~11개월): 월 100만원 / 1세 (12~23개월): 월 50만원<br>아기 명의 통장으로 신청 · 복지로 또는 주민센터</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">아동수당 <span class="memo-badge">매달 지급</span></div>
+          <div class="memo-item-desc">만 8세 미만 월 10만원 / 복지로 또는 주민센터 신청</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">첫만남이용권 <span class="memo-badge">일시 지급</span></div>
+          <div class="memo-item-desc">출생 후 바우처 지급 (국민행복카드) / 첫째 200만원, 둘째 이상 300만원</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">육아휴직 급여 <span class="memo-badge">고용보험</span></div>
+          <div class="memo-item-desc">
+            6+6 부모육아휴직제: 각각 6개월씩 사용 시 상향 지급<br>
+            1~3개월: 통상임금 100% (상한 250만원)<br>
+            4~6개월: 통상임금 100% (상한 200만원)<br>
+            7개월~: 통상임금 80% (상한 150만원)
+          </div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">양육수당 <span class="memo-badge">어린이집 미이용 시</span></div>
+          <div class="memo-item-desc">0세: 월 20만원 / 1세: 월 15만원 / 2세~: 월 10만원<br>어린이집·유치원 이용 시 보육료 바우처로 대체</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">자녀장려금 <span class="memo-badge">연 1회</span></div>
+          <div class="memo-item-desc">부부 합산 소득 4천만원 미만 / 자녀 1인당 최대 100만원<br>매년 5월 종합소득세 신고 시 함께 신청</div>
+        </div>
+      </div>
+    </details>
+
+    <details class="memo-section">
+      <summary>🧾 세금 혜택</summary>
+      <div class="memo-body">
+        <div class="memo-item">
+          <div class="memo-item-title">산후조리비 세액공제</div>
+          <div class="memo-item-desc">의료비 세액공제 항목에 포함 / 한도 200만원<br>연말정산 의료비 공제 시 영수증 챙겨두기</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">자녀 인적공제</div>
+          <div class="memo-item-desc">자녀 1인당 150만원 기본공제 + 출생·입양 공제 추가<br>출생 연도 연말정산에 반드시 반영</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">의료비 세액공제</div>
+          <div class="memo-item-desc">총급여의 3% 초과분에 대해 15% 세액공제<br>신생아 의료비는 한도 없이 전액 공제 대상</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">출산 후 주택 취득세 감면</div>
+          <div class="memo-item-desc">2024년 이후 출생 자녀 있는 경우 주택 취득세 감면<br>출생일로부터 5년 이내 취득 / 주택 가격 요건 확인 필요</div>
+        </div>
+      </div>
+    </details>
+
+    <details class="memo-section">
+      <summary>🏦 대출</summary>
+      <div class="memo-body">
+        <div class="memo-item">
+          <div class="memo-item-title">신생아 특례 구입 대출 <span class="memo-badge">주요</span></div>
+          <div class="memo-item-desc">
+            대상: 대출 신청일 기준 2년 이내 출산 가구<br>
+            금리: 연 1.6~3.3% (소득·기간별 차등)<br>
+            한도: 최대 5억원 / LTV 70~80%<br>
+            주택가격: 9억원 이하 / 부부합산 연소득 1.3억 이하<br>
+            신청: 주택도시기금 앱 또는 기금e든든
+          </div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">신생아 특례 전세 대출</div>
+          <div class="memo-item-desc">
+            금리: 연 1.1~3.0%<br>
+            한도: 최대 3억원<br>
+            전세금: 수도권 5억 이하 / 지방 4억 이하
+          </div>
+        </div>
+        <div class="memo-note">* 금리 및 조건은 정책 변경에 따라 달라질 수 있으므로 신청 전 주택도시기금 공식 사이트에서 최신 내용 확인 바랍니다.</div>
+      </div>
+    </details>
+
+    <details class="memo-section">
+      <summary>🏛️ 이재명 정부 출산 지원 정책</summary>
+      <div class="memo-body">
+        <div class="memo-item">
+          <div class="memo-item-title">부모급여 인상</div>
+          <div class="memo-item-desc">0세 월 100만원으로 확대 (기존 70만원 → 100만원)</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">첫만남이용권 확대</div>
+          <div class="memo-item-desc">첫째 200만원, 둘째 이상 300만원 바우처 지급</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">육아휴직 급여 인상</div>
+          <div class="memo-item-desc">6+6 부모육아휴직 급여 대폭 확대, 통상임금 100% (상한 250만원) 적용</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">신생아 특례 대출 요건 완화</div>
+          <div class="memo-item-desc">소득 요건 및 주택 가격 기준 완화 / 대상 확대 추진</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">산후조리원 지원 확대</div>
+          <div class="memo-item-desc">국가 바우처 지원 / 지자체별 추가 지원 여부 확인 필요</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">임신 출산 진료비 지원 확대</div>
+          <div class="memo-item-desc">국민행복카드 바우처 금액 확대 (단태아 기준 100만원 이상)</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">아동수당 지급 연령 확대</div>
+          <div class="memo-item-desc">만 8세 → 만 18세까지 확대 추진 중</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">공공보육 확충</div>
+          <div class="memo-item-desc">국공립 어린이집 확충 / 직장어린이집 의무화 확대</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">아이돌봄서비스 확대</div>
+          <div class="memo-item-desc">정부 지원 아이돌봄 서비스 이용 시간 확대 및 본인 부담 인하</div>
+        </div>
+        <div class="memo-item">
+          <div class="memo-item-title">지자체별 출산 장려금</div>
+          <div class="memo-item-desc">거주 지자체에 따라 수십~수백만원 추가 지급 / 주민센터 확인 필수</div>
+        </div>
+        <div class="memo-note">* 정책은 예산·법령 상황에 따라 변경될 수 있습니다. 정부24(gov.kr) 또는 복지로(bokjiro.go.kr)에서 최신 내용을 확인하세요.</div>
+      </div>
+    </details>
+
   </div>
 
 </div>
@@ -488,7 +937,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBlklBVlFOuAoind0joTSwd8hq1gR2ZiIY",
@@ -505,10 +954,9 @@
   const db = getDatabase(app);
   const checklistRef = ref(db, 'checklist');
 
-  const TOTAL = [8, 8, 10, 6];
-  let remoteUpdating = false; // Firebase에서 받아온 데이터 반영 중엔 재업로드 방지
+  const TOTAL = [5, 9, 16, 5, 5];
+  let remoteUpdating = false;
 
-  // 싱크 상태 UI
   function setSyncStatus(status) {
     const dot = document.getElementById('syncDot');
     const text = document.getElementById('syncText');
@@ -524,7 +972,6 @@
     }
   }
 
-  // 날짜 유틸
   function addDays(dateStr, days) {
     if (!dateStr) return null;
     const d = new Date(dateStr);
@@ -540,22 +987,26 @@
   }
 
   function renderDates(birth, care) {
-    const d3 = addDays(care, 3);
-    const d7 = addDays(care, 7);
-    const d14 = addDays(care, 14);
-    const d0 = birth ? addDays(birth, 0) : null;
+    const dPre = birth ? addDays(birth, -14) : null;
+    const d0   = birth ? addDays(birth, 0)   : null;
+    const d1   = care  ? addDays(care, 1)    : null;
+    const d7   = care  ? addDays(care, 7)    : null;
+    const d14  = care  ? addDays(care, 14)   : null;
 
-    document.getElementById('care3').textContent = d3 ? formatKr(d3) : '입소일 +3일';
-    document.getElementById('care7').textContent = d7 ? formatKr(d7) : '입소일 +7일';
-    document.getElementById('care14').textContent = d14 ? formatKr(d14) : '입소일 +14일';
-    document.getElementById('tab0date').textContent = d0 ? formatKr(d0) : '날짜 미입력';
-    document.getElementById('tab1date').textContent = d3 ? formatKr(d3) : '입소일 +3일';
-    document.getElementById('tab2date').textContent = d7 ? formatKr(d7) : '입소일 +7일';
-    document.getElementById('tab3date').textContent = d14 ? formatKr(d14) : '입소일 +14일';
+    document.getElementById('datePre').textContent = dPre ? formatKr(dPre) : '출산일 -14일';
+    document.getElementById('care1').textContent   = d1   ? formatKr(d1)   : '입소 다음날';
+    document.getElementById('care7').textContent   = d7   ? formatKr(d7)   : '입소일 +7일';
+    document.getElementById('care14').textContent  = d14  ? formatKr(d14)  : '입소일 +14일';
+
+    document.getElementById('tab0date').textContent = dPre ? formatKr(dPre) : '출산일 -14일';
+    document.getElementById('tab1date').textContent = d0   ? formatKr(d0)   : '날짜 미입력';
+    document.getElementById('tab2date').textContent = d1   ? formatKr(d1)   : '입소 다음날';
+    document.getElementById('tab3date').textContent = d7   ? formatKr(d7)   : '입소일 +7일';
+    document.getElementById('tab4date').textContent = d14  ? formatKr(d14)  : '입소일 +14일';
   }
 
   function updateProgress() {
-    for (let t = 0; t < 4; t++) {
+    for (let t = 0; t < TOTAL.length; t++) {
       const done = document.querySelectorAll('#panel' + t + ' .check-item.done').length;
       const total = TOTAL[t];
       document.getElementById('prog' + t).textContent = done + ' / ' + total;
@@ -564,33 +1015,40 @@
     }
   }
 
-  // Firebase → UI 반영 (실시간 리스너)
   onValue(checklistRef, (snapshot) => {
     remoteUpdating = true;
     const data = snapshot.val() || {};
 
-    // 날짜
     const birth = data.birthDate || '';
-    const care = data.careDate || '';
+    const care  = data.careDate  || '';
     if (birth) document.getElementById('birthDate').value = birth;
-    if (care) document.getElementById('careDate').value = care;
+    if (care)  document.getElementById('careDate').value  = care;
     renderDates(birth, care);
 
-    // 체크박스
+    // 체크박스 상태 복원
     const checks = data.checks || {};
     document.querySelectorAll('.check-item').forEach(el => {
-      const val = checks[el.dataset.id];
-      el.classList.toggle('done', val === true);
+      el.classList.toggle('done', checks[el.dataset.id] === true);
+    });
+
+    // 역할 태그 상태 복원
+    const tags = data.tags || {};
+    document.querySelectorAll('.tag-role').forEach(btn => {
+      const itemId = btn.closest('.check-item').dataset.id;
+      const role = btn.dataset.role;
+      const key = itemId + '_' + role;
+      const isOn = tags[key] === true;
+      btn.classList.toggle('on-mom', role === 'mom' && isOn);
+      btn.classList.toggle('on-dad', role === 'dad' && isOn);
     });
 
     updateProgress();
     setSyncStatus('connected');
     remoteUpdating = false;
-  }, (error) => {
+  }, () => {
     setSyncStatus('disconnected');
   });
 
-  // UI → Firebase 저장
   window.toggle = function(el) {
     if (remoteUpdating) return;
     el.classList.toggle('done');
@@ -601,9 +1059,19 @@
     updateProgress();
   };
 
+  window.toggleTag = function(e, btn, itemId, role) {
+    e.stopPropagation();
+    if (remoteUpdating) return;
+    const cls = 'on-' + role;
+    const isOn = btn.classList.toggle(cls);
+    setSyncStatus('syncing');
+    update(ref(db, 'checklist/tags'), { [itemId + '_' + role]: isOn })
+      .then(() => setSyncStatus('connected'));
+  };
+
   window.saveDates = function() {
     const birth = document.getElementById('birthDate').value;
-    const care = document.getElementById('careDate').value;
+    const care  = document.getElementById('careDate').value;
     renderDates(birth, care);
     setSyncStatus('syncing');
     update(checklistRef, { birthDate: birth, careDate: care })
