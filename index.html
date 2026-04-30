@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>출산 체크리스트</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #ff8fab, #ffb3c6);
+      padding: 24px 20px 20px;
+      text-align: center;
+      color: white;
+    }
+    .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .header p { font-size: 13px; opacity: 0.9; }
+
+    /* 싱크 상태 표시 */
+    .sync-bar {
+      background: white;
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #aaa;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .sync-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ccc;
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .sync-dot.connected { background: #4caf50; }
+    .sync-dot.syncing {
+      background: #ff9800;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .date-section {
+      background: white;
+      margin: 16px 16px 0;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .date-section h2 { font-size: 15px; color: #555; margin-bottom: 14px; font-weight: 600; }
+
+    .date-row { display: flex; flex-direction: column; gap: 12px; }
+    .date-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .date-item label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      white-space: nowrap;
+      min-width: 110px;
+    }
+    .date-item input[type="date"] {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 14px;
+      color: #222;
+      background: #fafafa;
+      -webkit-appearance: none;
+      outline: none;
+      max-width: 180px;
+    }
+    .date-item input[type="date"]:focus { border-color: #ff8fab; background: white; }
+    .date-item.auto-date {
+      background: #fff5f7;
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .date-item.auto-date label { color: #888; font-weight: 500; }
+    .auto-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ff8fab;
+      min-width: 110px;
+      text-align: right;
+    }
+
+    .tabs-wrapper {
+      padding: 16px 16px 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs-wrapper::-webkit-scrollbar { display: none; }
+    .tabs { display: flex; gap: 8px; min-width: max-content; }
+    .tab-btn {
+      padding: 9px 14px;
+      border-radius: 20px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      background: white;
+      color: #888;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tab-btn.active { background: #ff8fab; color: white; box-shadow: 0 2px 8px rgba(255,143,171,0.4); }
+    .tab-btn .tab-date { font-size: 11px; font-weight: 400; display: block; margin-top: 2px; opacity: 0.8; }
+
+    .panels { padding: 12px 16px 32px; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+    .panel-title { font-size: 16px; font-weight: 700; color: #333; }
+    .progress-text { font-size: 13px; color: #ff8fab; font-weight: 600; }
+
+    .progress-bar-wrap {
+      background: #f0f0f0;
+      border-radius: 6px;
+      height: 6px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #ff8fab, #ffb3c6);
+      transition: width 0.3s ease;
+    }
+
+    .check-card {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 14px 16px;
+      gap: 12px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.15s;
+    }
+    .check-item:active { background: #fafafa; }
+    .check-item + .check-item { border-top: 1px solid #f5f5f5; }
+
+    .check-box {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+      transition: all 0.2s;
+    }
+    .check-box svg { display: none; }
+    .check-item.done .check-box { background: #ff8fab; border-color: #ff8fab; }
+    .check-item.done .check-box svg { display: block; }
+
+    .check-text {
+      flex: 1;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #333;
+      transition: color 0.2s;
+    }
+    .check-item.done .check-text { color: #bbb; text-decoration: line-through; }
+
+    .check-sub { font-size: 12px; color: #aaa; margin-top: 3px; line-height: 1.4; }
+    .check-item.done .check-sub { color: #ccc; }
+
+    .tag-optional {
+      display: inline-block;
+      font-size: 11px;
+      background: #f0f0f0;
+      color: #aaa;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: 4px;
+      font-weight: 500;
+      vertical-align: middle;
+    }
+    .tag-important {
+      display: inline-block;
+      font-size: 11px;
+      background: #fff0f3;
+      color: #ff8fab;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: 4px;
+      font-weight: 600;
+      vertical-align: middle;
+    }
+
+    .all-done { text-align: center; padding: 24px; display: none; }
+    .all-done.show { display: block; }
+    .all-done span { font-size: 36px; }
+    .all-done p { font-size: 14px; color: #888; margin-top: 8px; }
+
+    .reset-btn {
+      display: block;
+      margin: 0 auto;
+      padding: 8px 20px;
+      border: 1.5px solid #ddd;
+      border-radius: 20px;
+      background: white;
+      color: #aaa;
+      font-size: 13px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>👶 출산 체크리스트</h1>
+  <p>날짜를 입력하면 일정이 자동으로 설정돼요</p>
+</div>
+
+<div class="sync-bar">
+  <div class="sync-dot" id="syncDot"></div>
+  <span id="syncText">연결 중...</span>
+</div>
+
+<div class="date-section">
+  <h2>📅 날짜 설정</h2>
+  <div class="date-row">
+    <div class="date-item">
+      <label>🚨 출산일</label>
+      <input type="date" id="birthDate" onchange="saveDates()">
+    </div>
+    <div class="date-item">
+      <label>🏥 조리원 입소일</label>
+      <input type="date" id="careDate" onchange="saveDates()">
+    </div>
+    <div class="date-item auto-date">
+      <label>📝 조리원 생활중</label>
+      <span class="auto-value" id="care3">입소일 +3일</span>
+    </div>
+    <div class="date-item auto-date">
+      <label>🤱 아기 오기 전</label>
+      <span class="auto-value" id="care7">입소일 +7일</span>
+    </div>
+    <div class="date-item auto-date">
+      <label>👶 아기 오는 날</label>
+      <span class="auto-value" id="care14">입소일 +14일</span>
+    </div>
+  </div>
+</div>
+
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(0)">
+      🚨 출산 당일
+      <span class="tab-date" id="tab0date">날짜 미입력</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab(1)">
+      📝 조리원 생활중
+      <span class="tab-date" id="tab1date">입소일 +3일</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab(2)">
+      🤱 아기 오기 전
+      <span class="tab-date" id="tab2date">입소일 +7일</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab(3)">
+      👶 아기 오는 날
+      <span class="tab-date" id="tab3date">입소일 +14일</span>
+    </button>
+  </div>
+</div>
+
+<div class="panels">
+
+  <!-- 출산 당일 -->
+  <div class="panel active" id="panel0">
+    <div class="panel-header">
+      <span class="panel-title">🚨 출산 당일</span>
+      <span class="progress-text" id="prog0">0 / 8</span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="bar0" style="width:0%"></div></div>
+    <div class="check-card">
+      <div class="check-item" onclick="toggle(this)" data-id="d0_0">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">병원에 1인 입원실 사용알리기</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d0_1">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">제대혈 보관 여부 상의한 결과 알리기</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d0_2">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">아기 동영상 촬영 <span class="tag-important">중요</span><div class="check-sub">최대한 길게, 많이, 선명하게 촬영</div></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d0_3">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">무통주사 · 페인버스터 확인</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d0_4">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">출생증명서 받기 (출산병원)</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d0_5">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">산후조리원에 연락하기</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d0_6">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">산후도우미 연락하기</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d0_7">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">출생신고<div class="check-sub">온라인(처리 오래 걸림) · 관할 주민센터(빠름)</div></div>
+      </div>
+    </div>
+    <div class="all-done" id="done0"><span>🎉</span><p>출산 당일 항목을 모두 완료했어요!</p></div>
+  </div>
+
+  <!-- 조리원 생활중 -->
+  <div class="panel" id="panel1">
+    <div class="panel-header">
+      <span class="panel-title">📝 조리원 생활중</span>
+      <span class="progress-text" id="prog1">0 / 8</span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="bar1" style="width:0%"></div></div>
+    <div class="check-sub" style="color:#aaa;font-size:12px;padding:0 4px 10px;">출생신고 완료 후 진행하세요</div>
+    <div class="check-card">
+      <div class="check-item" onclick="toggle(this)" data-id="d1_0">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">아기 통장 만들기<div class="check-sub">필요 서류: 아기 도장 · 가족관계증명서 · 부모 신분증</div></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d1_1">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">아동수당 · 첫만남이용권 · 부모급여 신청<div class="check-sub">복지로/정부24 또는 주민센터 방문<br>아동수당 · 부모급여는 아기 통장으로 신청</div></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d1_2">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">1차 영유아검진 예약</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d1_3">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">BCG 예방접종 예약<div class="check-sub">피내용 · 경피용 상의하여 결정</div></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d1_4">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">건강보험공단에 아기 피보험자 등록 여부 확인</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d1_5">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">한전 연락해서 전기세 감면 신청</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d1_6">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">아기 보험사 연락해서 자녀 등록</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d1_7">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">자동차보험 자녀특약 신청</div>
+      </div>
+    </div>
+    <div class="all-done" id="done1"><span>🎉</span><p>조리원 생활중 항목을 모두 완료했어요!</p></div>
+  </div>
+
+  <!-- 아기 오기 전 -->
+  <div class="panel" id="panel2">
+    <div class="panel-header">
+      <span class="panel-title">🤱 아기 오기 전</span>
+      <span class="progress-text" id="prog2">0 / 10</span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="bar2" style="width:0%"></div></div>
+    <div class="check-sub" style="color:#aaa;font-size:12px;padding:0 4px 10px;">아기 오기 이틀 전까지 완료 (세제 냄새 빼야 함)</div>
+    <div class="check-card">
+      <div class="check-item" onclick="toggle(this)" data-id="d2_0">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">화장실 청소 😉<div class="check-sub">누워서 잘 수 있을 정도로 / 세제 냄새 빠지도록 이틀 전까지</div></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d2_1">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">집 청소<div class="check-sub">청소기 구석구석 + 스팀 구석구석</div></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d2_2">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">일회용 먼지포로 구석구석 먼지 없애기<div class="check-sub">티비서랍 맨 왼쪽에 있음</div></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d2_3">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">창문 로봇청소기 돌리기 <span class="tag-optional">선택</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d2_4">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">자동차 내외부 세차</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d2_5">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">유팡 세척</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d2_6">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">젖병 세척 후 건조대에서 완전히 건조<div class="check-sub">물기 완전히 제거 후 유팡 돌려야 함 (물기 x)</div></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d2_7">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">유팡 완료 후 물기 확인<div class="check-sub">물기 있으면 → 건조대에서 건조<br>물기 없으면 → 젖병 보관함에 보관</div></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d2_8">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">릴리브 분유포트 세척</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d2_9">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">철제 부속품 연마제 제거 및 세척</div>
+      </div>
+    </div>
+    <div class="all-done" id="done2"><span>🎉</span><p>아기 오기 전 항목을 모두 완료했어요!</p></div>
+  </div>
+
+  <!-- 아기 오는 당일 -->
+  <div class="panel" id="panel3">
+    <div class="panel-header">
+      <span class="panel-title">👶 아기 오는 날</span>
+      <span class="progress-text" id="prog3">0 / 6</span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="bar3" style="width:0%"></div></div>
+    <div class="check-card">
+      <div class="check-item" onclick="toggle(this)" data-id="d3_0">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">분유포트 물 넣고 온도 세팅<div class="check-sub">45° 설정</div></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d3_1">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">아기 물건 비닐 걷어놓기</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d3_2">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">차에 "신생아 타고 있어요" 붙이기</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d3_3">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">카시트 점검</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d3_4">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">공기청정기 미리 틀어놓기</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="d3_5">
+        <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-text">집 나올 때 로봇청소기 돌리고 나오기</div>
+      </div>
+    </div>
+    <div class="all-done" id="done3"><span>🎉</span><p>아기 오는 날 항목을 모두 완료했어요!</p></div>
+  </div>
+
+</div>
+
+<button class="reset-btn" onclick="resetAll()">체크 초기화</button>
+<div style="height:32px;"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBlklBVlFOuAoind0joTSwd8hq1gR2ZiIY",
+    authDomain: "baby-salt-df715.firebaseapp.com",
+    databaseURL: "https://baby-salt-df715-default-rtdb.firebaseio.com",
+    projectId: "baby-salt-df715",
+    storageBucket: "baby-salt-df715.firebasestorage.app",
+    messagingSenderId: "1007971298122",
+    appId: "1:1007971298122:web:eafaf943ed59ebaf8aefb3",
+    measurementId: "G-W81GBSZZDR"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const checklistRef = ref(db, 'checklist');
+
+  const TOTAL = [8, 8, 10, 6];
+  let remoteUpdating = false; // Firebase에서 받아온 데이터 반영 중엔 재업로드 방지
+
+  // 싱크 상태 UI
+  function setSyncStatus(status) {
+    const dot = document.getElementById('syncDot');
+    const text = document.getElementById('syncText');
+    if (status === 'connected') {
+      dot.className = 'sync-dot connected';
+      text.textContent = '실시간 싱크 연결됨';
+    } else if (status === 'syncing') {
+      dot.className = 'sync-dot syncing';
+      text.textContent = '동기화 중...';
+    } else {
+      dot.className = 'sync-dot';
+      text.textContent = '연결 끊김';
+    }
+  }
+
+  // 날짜 유틸
+  function addDays(dateStr, days) {
+    if (!dateStr) return null;
+    const d = new Date(dateStr);
+    d.setDate(d.getDate() + days);
+    return d;
+  }
+  function formatKr(date) {
+    if (!date) return null;
+    const m = date.getMonth() + 1;
+    const d = date.getDate();
+    const days = ['일','월','화','수','목','금','토'];
+    return m + '월 ' + d + '일 (' + days[date.getDay()] + ')';
+  }
+
+  function renderDates(birth, care) {
+    const d3 = addDays(care, 3);
+    const d7 = addDays(care, 7);
+    const d14 = addDays(care, 14);
+    const d0 = birth ? addDays(birth, 0) : null;
+
+    document.getElementById('care3').textContent = d3 ? formatKr(d3) : '입소일 +3일';
+    document.getElementById('care7').textContent = d7 ? formatKr(d7) : '입소일 +7일';
+    document.getElementById('care14').textContent = d14 ? formatKr(d14) : '입소일 +14일';
+    document.getElementById('tab0date').textContent = d0 ? formatKr(d0) : '날짜 미입력';
+    document.getElementById('tab1date').textContent = d3 ? formatKr(d3) : '입소일 +3일';
+    document.getElementById('tab2date').textContent = d7 ? formatKr(d7) : '입소일 +7일';
+    document.getElementById('tab3date').textContent = d14 ? formatKr(d14) : '입소일 +14일';
+  }
+
+  function updateProgress() {
+    for (let t = 0; t < 4; t++) {
+      const done = document.querySelectorAll('#panel' + t + ' .check-item.done').length;
+      const total = TOTAL[t];
+      document.getElementById('prog' + t).textContent = done + ' / ' + total;
+      document.getElementById('bar' + t).style.width = (done / total * 100) + '%';
+      document.getElementById('done' + t).classList.toggle('show', done === total);
+    }
+  }
+
+  // Firebase → UI 반영 (실시간 리스너)
+  onValue(checklistRef, (snapshot) => {
+    remoteUpdating = true;
+    const data = snapshot.val() || {};
+
+    // 날짜
+    const birth = data.birthDate || '';
+    const care = data.careDate || '';
+    if (birth) document.getElementById('birthDate').value = birth;
+    if (care) document.getElementById('careDate').value = care;
+    renderDates(birth, care);
+
+    // 체크박스
+    const checks = data.checks || {};
+    document.querySelectorAll('.check-item').forEach(el => {
+      const val = checks[el.dataset.id];
+      el.classList.toggle('done', val === true);
+    });
+
+    updateProgress();
+    setSyncStatus('connected');
+    remoteUpdating = false;
+  }, (error) => {
+    setSyncStatus('disconnected');
+  });
+
+  // UI → Firebase 저장
+  window.toggle = function(el) {
+    if (remoteUpdating) return;
+    el.classList.toggle('done');
+    const isDone = el.classList.contains('done');
+    setSyncStatus('syncing');
+    update(ref(db, 'checklist/checks'), { [el.dataset.id]: isDone })
+      .then(() => setSyncStatus('connected'));
+    updateProgress();
+  };
+
+  window.saveDates = function() {
+    const birth = document.getElementById('birthDate').value;
+    const care = document.getElementById('careDate').value;
+    renderDates(birth, care);
+    setSyncStatus('syncing');
+    update(checklistRef, { birthDate: birth, careDate: care })
+      .then(() => setSyncStatus('connected'));
+  };
+
+  window.resetAll = function() {
+    if (!confirm('모든 체크를 초기화할까요?')) return;
+    const emptyChecks = {};
+    document.querySelectorAll('.check-item').forEach(el => {
+      emptyChecks[el.dataset.id] = false;
+    });
+    setSyncStatus('syncing');
+    update(ref(db, 'checklist/checks'), emptyChecks)
+      .then(() => setSyncStatus('connected'));
+  };
+
+  window.switchTab = function(idx) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+    document.querySelectorAll('.panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+  };
+</script>
+</body>
+</html>
