@@ -322,6 +322,57 @@
       padding: 6px; display: none;
     }
     .delete-mode ~ .delete-hint, .delete-mode + .delete-hint { display: block; }
+
+    /* ── 추가/편집 모달 확장 ── */
+    .add-confirm-btn:disabled { background: #e0e0e0; color: #bbb; cursor: not-allowed; }
+    .add-text-input + .add-text-input { margin-top: 0; }
+    .important-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 0; margin-bottom: 12px;
+    }
+    .important-label { font-size: 14px; color: #333; font-weight: 600; }
+    .important-toggle-btn {
+      padding: 6px 16px; border-radius: 16px;
+      border: 1.5px solid #e8e8e8;
+      background: white; color: #bbb;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+      transition: all 0.15s;
+    }
+    .important-toggle-btn.on { background: #fff0f3; color: #ff8fab; border-color: #ff8fab; }
+
+    /* ── 컨텍스트 시트 ── */
+    .context-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 600; display: none; align-items: flex-end;
+    }
+    .context-overlay.show { display: flex; }
+    .context-sheet {
+      background: white; width: 100%;
+      border-radius: 20px 20px 0 0;
+      padding: 8px 16px calc(20px + env(safe-area-inset-bottom));
+    }
+    .context-item-name {
+      font-size: 13px; color: #aaa; text-align: center;
+      padding: 12px 0 10px;
+      border-bottom: 1px solid #f0f0f0;
+      margin-bottom: 4px; word-break: break-all;
+    }
+    .context-btn {
+      display: block; width: 100%;
+      padding: 16px; border: none; background: transparent;
+      font-size: 16px; font-weight: 600;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+      border-radius: 12px; transition: background 0.15s; text-align: center;
+    }
+    .context-btn:active { background: #f5f5f5; }
+    .context-btn.edit { color: #333; }
+    .context-btn.delete { color: #ff5252; }
+    .context-btn.cancel {
+      color: #888; font-weight: 500;
+      border-top: 1px solid #f0f0f0; margin-top: 4px; border-radius: 0;
+    }
   </style>
 </head>
 <body>
@@ -964,8 +1015,47 @@
       <button class="tab-sel-btn" onclick="selectAddTab(3)">🤱 아기 오기 전</button>
       <button class="tab-sel-btn" onclick="selectAddTab(4)">👶 아기 오는 날</button>
     </div>
-    <textarea class="add-text-input" id="addTextInput" rows="2" placeholder="추가할 항목을 입력하세요"></textarea>
-    <button class="add-confirm-btn" onclick="addCustomItem()">추가하기</button>
+    <input type="text" class="add-text-input" id="addTitleInput" placeholder="제목 (필수)" oninput="onAddTitleInput()">
+    <textarea class="add-text-input" id="addSubInput" rows="2" placeholder="설명 (선택)"></textarea>
+    <div class="important-row">
+      <span class="important-label">중요 태그</span>
+      <button class="important-toggle-btn" id="addImportantBtn" onclick="toggleAddImportant()">중요</button>
+    </div>
+    <button class="add-confirm-btn" id="addConfirmBtn" onclick="addCustomItem()" disabled>추가하기</button>
+  </div>
+</div>
+
+<!-- 컨텍스트 시트 (길게 누르기) -->
+<div class="context-overlay" id="contextOverlay" onclick="closeContextSheet()">
+  <div class="context-sheet" onclick="event.stopPropagation()">
+    <div class="context-item-name" id="contextItemName"></div>
+    <button class="context-btn edit" onclick="openEditModal()">편집</button>
+    <button class="context-btn delete" onclick="startDeleteFromContext()">삭제</button>
+    <button class="context-btn cancel" onclick="closeContextSheet()">취소</button>
+  </div>
+</div>
+
+<!-- 편집 모달 -->
+<div class="modal-overlay" id="editModalOverlay" onclick="handleEditOverlayClick(event)">
+  <div class="add-modal">
+    <div class="add-modal-header">
+      <span class="add-modal-title">✏️ 항목 편집</span>
+      <button class="add-modal-close" onclick="closeEditModal()">✕</button>
+    </div>
+    <div class="tab-selector" id="editTabSelector" style="display:none">
+      <button class="tab-sel-btn edit-tab-sel-btn active" onclick="selectEditTab(0)">📦 출산 전</button>
+      <button class="tab-sel-btn edit-tab-sel-btn" onclick="selectEditTab(1)">🚨 출산 당일</button>
+      <button class="tab-sel-btn edit-tab-sel-btn" onclick="selectEditTab(2)">📝 조리원 생활중</button>
+      <button class="tab-sel-btn edit-tab-sel-btn" onclick="selectEditTab(3)">🤱 아기 오기 전</button>
+      <button class="tab-sel-btn edit-tab-sel-btn" onclick="selectEditTab(4)">👶 아기 오는 날</button>
+    </div>
+    <input type="text" class="add-text-input" id="editTitleInput" placeholder="제목 (필수)" oninput="onEditTitleInput()">
+    <textarea class="add-text-input" id="editSubInput" rows="2" placeholder="설명 (선택)"></textarea>
+    <div class="important-row">
+      <span class="important-label">중요 태그</span>
+      <button class="important-toggle-btn" id="editImportantBtn" onclick="toggleEditImportant()">중요</button>
+    </div>
+    <button class="add-confirm-btn" id="editConfirmBtn" onclick="saveEdit()" disabled>저장하기</button>
   </div>
 </div>
 
@@ -996,10 +1086,20 @@
   let deleteModeTab = -1;
   let selectedForDelete = new Set();
   let pressTimer = null;
-  let longPressTriggered = false; // 길게 누른 직후 click 이벤트 무시용
+  let longPressTriggered = false;
+
+  // ── 컨텍스트 시트 상태 ──
+  let contextItemId = null;
+  let contextItemTab = -1;
+
+  // ── 편집 모달 상태 ──
+  let editingItemId = null;
+  let editingTab = -1;
+  let editImportantOn = false;
 
   // ── 추가 모달 상태 ──
   let addModalTab = 0;
+  let addImportantOn = false;
 
   // ────────────────────────────────
   // 싱크 상태
@@ -1062,12 +1162,47 @@
   }
 
   // ────────────────────────────────
-  // 커스텀 항목 렌더링
+  // 헬퍼: HTML 이스케이프
   // ────────────────────────────────
   function escapeHtml(t) {
-    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
+  // ────────────────────────────────
+  // 헬퍼: DOM에서 항목 정보 추출
+  // ────────────────────────────────
+  function getItemInfo(id) {
+    const el = document.querySelector('.check-item[data-id="' + id + '"]');
+    if (!el) return { title: '', sub: '', important: false };
+    const ct = el.querySelector('.check-text');
+    const clone = ct.cloneNode(true);
+    clone.querySelectorAll('.check-sub, .tag-important, .tag-row').forEach(e => e.remove());
+    const title = clone.textContent.trim();
+    const subEl = ct.querySelector('.check-sub');
+    const sub = subEl ? subEl.textContent.trim() : '';
+    const important = !!ct.querySelector('.tag-important');
+    return { title, sub, important };
+  }
+
+  // ────────────────────────────────
+  // 헬퍼: 항목 DOM 업데이트
+  // ────────────────────────────────
+  function applyItemData(id, title, sub, important) {
+    const el = document.querySelector('.check-item[data-id="' + id + '"]');
+    if (!el) return;
+    const ct = el.querySelector('.check-text');
+    const tagRowEl = ct.querySelector('.tag-row');
+    const tagRowHTML = tagRowEl ? tagRowEl.outerHTML : '';
+    let html = escapeHtml(title);
+    if (important) html += ' <span class="tag-important">중요</span>';
+    if (sub) html += '<div class="check-sub">' + escapeHtml(sub) + '</div>';
+    html += tagRowHTML;
+    ct.innerHTML = html;
+  }
+
+  // ────────────────────────────────
+  // 커스텀 항목 렌더링
+  // ────────────────────────────────
   function renderCustomItem(id, item) {
     if (item.tab === undefined || !item.text) return;
     const card = document.getElementById('card' + item.tab);
@@ -1075,14 +1210,18 @@
     const div = document.createElement('div');
     div.className = 'check-item';
     div.dataset.id = id;
-    div.innerHTML =
-      '<div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none">' +
-      '<path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
-      '<div class="check-text">' + escapeHtml(item.text) +
+    let textHtml = escapeHtml(item.text);
+    if (item.important) textHtml += ' <span class="tag-important">중요</span>';
+    if (item.sub) textHtml += '<div class="check-sub">' + escapeHtml(item.sub) + '</div>';
+    textHtml +=
       '<div class="tag-row">' +
       '<button class="tag-role" data-role="mom" onclick="toggleTag(event,this,\'' + id + '\',\'mom\')">엄마</button>' +
       '<button class="tag-role" data-role="dad" onclick="toggleTag(event,this,\'' + id + '\',\'dad\')">아빠</button>' +
-      '</div></div>';
+      '</div>';
+    div.innerHTML =
+      '<div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none">' +
+      '<path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+      '<div class="check-text">' + textHtml + '</div>';
     card.appendChild(div);
   }
 
@@ -1108,10 +1247,25 @@
     // 커스텀 항목 동기화 (diff 방식)
     const existingCust = new Set([...document.querySelectorAll('.check-item[data-id^="cust_"]')].map(e => e.dataset.id));
     const custom = data.custom || {};
-    // 삭제된 커스텀 항목 제거
-    existingCust.forEach(id => { if (!custom[id]) { const el = document.querySelector('[data-id="' + id + '"]'); if (el) el.remove(); } });
-    // 새 커스텀 항목 추가
-    Object.entries(custom).forEach(([id, item]) => { if (item && !existingCust.has(id)) renderCustomItem(id, item); });
+    existingCust.forEach(id => {
+      if (!custom[id]) { const el = document.querySelector('[data-id="' + id + '"]'); if (el) el.remove(); }
+    });
+    Object.entries(custom).forEach(([id, item]) => {
+      if (item && !existingCust.has(id)) renderCustomItem(id, item);
+    });
+
+    // 편집된 커스텀 항목 업데이트 (이미 DOM에 있는 항목)
+    Object.entries(custom).forEach(([id, item]) => {
+      if (item && existingCust.has(id)) {
+        applyItemData(id, item.text, item.sub || '', !!item.important);
+      }
+    });
+
+    // 고정 항목 오버라이드 적용
+    const overrides = data.overrides || {};
+    Object.entries(overrides).forEach(([id, ov]) => {
+      if (ov) applyItemData(id, ov.text || '', ov.sub || '', !!ov.important);
+    });
 
     // 체크박스 상태
     const checks = data.checks || {};
@@ -1135,7 +1289,6 @@
   // ────────────────────────────────
   window.toggle = function(el) {
     if (deleteMode) {
-      // 삭제 모드: 같은 탭 항목만 선택 가능
       const panelEl = el.closest('.panel');
       if (!panelEl || panelEl.id !== 'panel' + deleteModeTab) return;
       toggleSelectForDelete(el);
@@ -1178,7 +1331,7 @@
   // 탭 전환
   // ────────────────────────────────
   window.switchTab = function(idx) {
-    if (deleteMode) return; // 삭제 모드 중엔 탭 이동 불가
+    if (deleteMode) return;
     currentTab = idx;
     document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
     document.querySelectorAll('.panel').forEach((p, i) => p.classList.toggle('active', i === idx));
@@ -1189,18 +1342,15 @@
   // ────────────────────────────────
   function enterDeleteMode(tabIdx, el) {
     if (deleteMode || tabIdx >= 5) return;
-    longPressTriggered = true;
     deleteMode = true;
     deleteModeTab = tabIdx;
     selectedForDelete.clear();
     document.getElementById('panel' + tabIdx).classList.add('delete-mode');
-    // 처음 길게 누른 항목 자동 선택
     el.classList.add('selected-del');
     selectedForDelete.add(el.dataset.id);
     updateDeleteBar();
     document.getElementById('deleteBar').classList.add('show');
     document.getElementById('fabBtn').style.display = 'none';
-    if (navigator.vibrate) navigator.vibrate(40);
   }
 
   function exitDeleteMode() {
@@ -1241,6 +1391,7 @@
         updates['custom/' + id] = null;
       } else {
         updates['deleted/' + id] = true;
+        updates['overrides/' + id] = null;
       }
     });
 
@@ -1253,7 +1404,122 @@
 
   window.exitDeleteMode = exitDeleteMode;
 
+  // ────────────────────────────────
+  // 컨텍스트 시트 (길게 누르기)
+  // ────────────────────────────────
+  function openContextSheet(tabIdx, el) {
+    longPressTriggered = true;
+    contextItemId = el.dataset.id;
+    contextItemTab = tabIdx;
+    const info = getItemInfo(contextItemId);
+    const shortTitle = info.title.length > 22 ? info.title.slice(0, 22) + '…' : info.title;
+    document.getElementById('contextItemName').textContent = '"' + shortTitle + '"';
+    document.getElementById('contextOverlay').classList.add('show');
+    if (navigator.vibrate) navigator.vibrate(40);
+  }
+
+  window.closeContextSheet = function() {
+    document.getElementById('contextOverlay').classList.remove('show');
+  };
+
+  window.startDeleteFromContext = function() {
+    const id = contextItemId;
+    const tabIdx = contextItemTab;
+    closeContextSheet();
+    const el = document.querySelector('.check-item[data-id="' + id + '"]');
+    if (!el) return;
+    enterDeleteMode(tabIdx, el);
+  };
+
+  // ────────────────────────────────
+  // 편집 모달
+  // ────────────────────────────────
+  window.openEditModal = function() {
+    const id = contextItemId;
+    closeContextSheet();
+    editingItemId = id;
+    const isCustom = id.startsWith('cust_');
+    const info = getItemInfo(id);
+
+    document.getElementById('editTitleInput').value = info.title;
+    document.getElementById('editSubInput').value = info.sub;
+    editImportantOn = info.important;
+    document.getElementById('editImportantBtn').classList.toggle('on', editImportantOn);
+    document.getElementById('editImportantBtn').textContent = editImportantOn ? '중요 ✓' : '중요';
+    document.getElementById('editConfirmBtn').disabled = !info.title;
+
+    const tabSel = document.getElementById('editTabSelector');
+    if (isCustom) {
+      tabSel.style.display = 'flex';
+      const custEl = document.querySelector('.check-item[data-id="' + id + '"]');
+      const panelEl = custEl ? custEl.closest('.panel') : null;
+      editingTab = panelEl ? parseInt(panelEl.id.replace('panel', '')) : 0;
+      document.querySelectorAll('.edit-tab-sel-btn').forEach((btn, i) => btn.classList.toggle('active', i === editingTab));
+    } else {
+      tabSel.style.display = 'none';
+      editingTab = -1;
+    }
+
+    document.getElementById('editModalOverlay').classList.add('show');
+    setTimeout(() => document.getElementById('editTitleInput').focus(), 200);
+  };
+
+  window.closeEditModal = function() {
+    document.getElementById('editModalOverlay').classList.remove('show');
+    editingItemId = null;
+  };
+
+  window.handleEditOverlayClick = function(e) {
+    if (e.target === document.getElementById('editModalOverlay')) closeEditModal();
+  };
+
+  window.onEditTitleInput = function() {
+    const v = document.getElementById('editTitleInput').value.trim();
+    document.getElementById('editConfirmBtn').disabled = !v;
+  };
+
+  window.toggleEditImportant = function() {
+    editImportantOn = !editImportantOn;
+    const btn = document.getElementById('editImportantBtn');
+    btn.classList.toggle('on', editImportantOn);
+    btn.textContent = editImportantOn ? '중요 ✓' : '중요';
+  };
+
+  window.selectEditTab = function(idx) {
+    editingTab = idx;
+    document.querySelectorAll('.edit-tab-sel-btn').forEach((btn, i) => btn.classList.toggle('active', i === idx));
+  };
+
+  window.saveEdit = async function() {
+    const title = document.getElementById('editTitleInput').value.trim();
+    if (!title) return;
+    const sub = document.getElementById('editSubInput').value.trim();
+    const id = editingItemId;
+    const isCustom = id.startsWith('cust_');
+
+    setSyncStatus('syncing');
+    if (isCustom) {
+      const custEl = document.querySelector('.check-item[data-id="' + id + '"]');
+      const panelEl = custEl ? custEl.closest('.panel') : null;
+      const currentTabOfItem = panelEl ? parseInt(panelEl.id.replace('panel', '')) : 0;
+      const targetTab = editingTab >= 0 ? editingTab : currentTabOfItem;
+      await update(ref(db, 'checklist/custom'), {
+        [id]: { tab: targetTab, text: title, sub: sub || null, important: editImportantOn || null }
+      });
+      applyItemData(id, title, sub, editImportantOn);
+    } else {
+      await update(ref(db, 'checklist/overrides'), {
+        [id]: { text: title, sub: sub || null, important: editImportantOn || null }
+      });
+      applyItemData(id, title, sub, editImportantOn);
+    }
+    setSyncStatus('connected');
+    closeEditModal();
+  };
+
+  // ────────────────────────────────
   // 길게 누르기 감지 (이벤트 위임)
+  // ────────────────────────────────
   for (let t = 0; t < 5; t++) {
     const panel = document.getElementById('panel' + t);
     if (!panel) continue;
@@ -1262,10 +1528,10 @@
     panel.addEventListener('contextmenu', e => e.preventDefault());
 
     panel.addEventListener('touchstart', e => {
-      if (e.target.closest('.tag-role') || e.target.closest('.check-box') === null && e.target.tagName === 'BUTTON') return;
+      if (e.target.closest('.tag-role') || (e.target.closest('.check-box') === null && e.target.tagName === 'BUTTON')) return;
       const item = e.target.closest('.check-item');
       if (!item || deleteMode) return;
-      pressTimer = setTimeout(() => enterDeleteMode(tabIdx, item), 600);
+      pressTimer = setTimeout(() => openContextSheet(tabIdx, item), 600);
     }, { passive: true });
 
     panel.addEventListener('touchend',  () => clearTimeout(pressTimer), { passive: true });
@@ -1275,17 +1541,16 @@
       if (e.target.closest('.tag-role')) return;
       const item = e.target.closest('.check-item');
       if (!item || deleteMode) return;
-      pressTimer = setTimeout(() => enterDeleteMode(tabIdx, item), 600);
+      pressTimer = setTimeout(() => openContextSheet(tabIdx, item), 600);
     });
     panel.addEventListener('mouseup',    () => clearTimeout(pressTimer));
     panel.addEventListener('mouseleave', () => clearTimeout(pressTimer));
 
-    // 클릭 이벤트를 check-item에 위임
     panel.addEventListener('click', e => {
-      if (longPressTriggered) { longPressTriggered = false; return; } // 길게 누른 직후 click 무시
+      if (longPressTriggered) { longPressTriggered = false; return; }
       const item = e.target.closest('.check-item');
       if (!item) return;
-      if (e.target.closest('.tag-role')) return; // 태그 버튼은 자체 처리
+      if (e.target.closest('.tag-role')) return;
       window.toggle(item);
     });
   }
@@ -1296,9 +1561,14 @@
   window.openAddModal = function() {
     const target = currentTab < 5 ? currentTab : 0;
     selectAddTab(target);
-    document.getElementById('addTextInput').value = '';
+    document.getElementById('addTitleInput').value = '';
+    document.getElementById('addSubInput').value = '';
+    addImportantOn = false;
+    document.getElementById('addImportantBtn').classList.remove('on');
+    document.getElementById('addImportantBtn').textContent = '중요';
+    document.getElementById('addConfirmBtn').disabled = true;
     document.getElementById('addModalOverlay').classList.add('show');
-    setTimeout(() => document.getElementById('addTextInput').focus(), 200);
+    setTimeout(() => document.getElementById('addTitleInput').focus(), 200);
   };
 
   window.closeAddModal = function() {
@@ -1311,18 +1581,32 @@
 
   window.selectAddTab = function(idx) {
     addModalTab = idx;
-    document.querySelectorAll('.tab-sel-btn').forEach((btn, i) => btn.classList.toggle('active', i === idx));
+    document.querySelectorAll('#tabSelector .tab-sel-btn').forEach((btn, i) => btn.classList.toggle('active', i === idx));
+  };
+
+  window.onAddTitleInput = function() {
+    const v = document.getElementById('addTitleInput').value.trim();
+    document.getElementById('addConfirmBtn').disabled = !v;
+  };
+
+  window.toggleAddImportant = function() {
+    addImportantOn = !addImportantOn;
+    const btn = document.getElementById('addImportantBtn');
+    btn.classList.toggle('on', addImportantOn);
+    btn.textContent = addImportantOn ? '중요 ✓' : '중요';
   };
 
   window.addCustomItem = async function() {
-    const text = document.getElementById('addTextInput').value.trim();
-    if (!text) { document.getElementById('addTextInput').focus(); return; }
+    const title = document.getElementById('addTitleInput').value.trim();
+    if (!title) return;
+    const sub = document.getElementById('addSubInput').value.trim();
     const id = 'cust_' + Date.now();
     setSyncStatus('syncing');
-    await update(ref(db, 'checklist/custom'), { [id]: { tab: addModalTab, text } });
+    await update(ref(db, 'checklist/custom'), {
+      [id]: { tab: addModalTab, text: title, sub: sub || null, important: addImportantOn || null }
+    });
     setSyncStatus('connected');
     closeAddModal();
-    // 해당 탭으로 이동
     window.switchTab(addModalTab);
   };
 
